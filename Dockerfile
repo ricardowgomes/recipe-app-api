@@ -9,6 +9,7 @@ LABEL maintainer="@ricardowgomes"
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
@@ -19,15 +20,20 @@ EXPOSE 8000
 # install the requirement on our Docker image
 # rm removes extra dependencies
 # adding a extra user (other root user, which is not recomended)
+ARG DEV=false
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
+    if [ $DEV = "true" ]; \
+        then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+    fi && \
     rm -rf /tmp && \
     adduser \
         --disabled-password \
         --no-create-home \
         django-user
 
+# This updates the env path
 ENV PATH="/py/bin:$PATH"
 
 USER django-user
