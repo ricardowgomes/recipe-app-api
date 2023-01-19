@@ -13,7 +13,7 @@ CREATE_USER_URL = reverse('user:create')
 
 def create_user(**params):
     """Create and return a new user."""
-    return get_user_model().objects.create_user(params)
+    return get_user_model().objects.create_user(**params)
 
 
 class PublicUserApiTests(TestCase):
@@ -52,7 +52,7 @@ class PublicUserApiTests(TestCase):
         """Test an error is returned if password less than 56 chars."""
         payload = {
           'email': 'test@example.com',
-          'password': 'testpass123',
+          'password': 'pw',
           'name': 'Test Name',
         }
         res = self.client.post(CREATE_USER_URL, payload)
