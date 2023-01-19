@@ -36,7 +36,7 @@ class ModelTestes(TestCase):
         """Test that creating a user without an email raises an ValueError."""
         with self.assertRaises(ValueError):
             get_user_model().objects.create_user('', 'sample123')
-    
+
     def test_create_superuser(self):
         """Test creating a superuser."""
         user = get_user_model().objects.create_superuser(
